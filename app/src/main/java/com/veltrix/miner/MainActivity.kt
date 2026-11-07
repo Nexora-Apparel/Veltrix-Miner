@@ -306,7 +306,7 @@ private fun WalletScreen() {
 @Composable
 private fun MoreScreen() {
     val context = LocalContext.current
-    val batteryManager = context.getSystemService(Activity.BATTERY_SERVICE) as BatteryManager
+    val batteryManager = context.getSystemService(BatteryManager::class.java)
     val battery = remember { batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY).coerceIn(0, 100) }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
