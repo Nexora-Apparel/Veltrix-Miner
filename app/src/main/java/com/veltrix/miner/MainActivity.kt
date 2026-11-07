@@ -41,6 +41,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,6 +52,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 
 private val Ink = Color(0xFF0B1017)
 private val Panel = Color(0xFF151E29)
@@ -307,7 +309,13 @@ private fun WalletScreen() {
 private fun MoreScreen() {
     val context = LocalContext.current
     val batteryManager = context.getSystemService(BatteryManager::class.java)
-    val battery = remember { batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY).coerceIn(0, 100) }
+    val battery = remember { mutableIntStateOf(readBatteryPercent(batteryManager)) }
+    LaunchedEffect(batteryManager) {
+        while (true) {
+            battery.intValue = readBatteryPercent(batteryManager)
+            delay(30_000)
+        }
+    }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
@@ -318,10 +326,21 @@ private fun MoreScreen() {
             Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
                 Column(Modifier.padding(15.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("DEVICE HEALTH", color = Muted, fontSize = 10.sp, letterSpacing = 1.sp)
-                    InfoRow(Icons.Default.Bolt, "Battery level", if (battery in 1..100) "$battery%" else "Unavailable")
+                    InfoRow(Icons.Default.Bolt, "Battery level", if (battery.intValue in 1..100) "${battery.intValue}%" else "Unavailable")
                     InfoRow(Icons.Default.Memory, "Device", Build.MODEL ?: "Android device")
                     InfoRow(Icons.Default.Settings, "Android version", "Android ${Build.VERSION.RELEASE} · API ${Build.VERSION.SDK_INT}")
                     InfoRow(Icons.Default.Wifi, "Mining connection", "Not configured")
+                }
+            }
+        }
+        item {
+            Card(colors = CardDefaults.cardColors(containerColor = Panel)) {
+                Column(Modifier.padding(15.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("WORKER MONITORING", color = Muted, fontSize = 10.sp, letterSpacing = 1.sp)
+                    InfoRow(Icons.Default.Memory, "Registered workers", "0 · none connected")
+                    InfoRow(Icons.Default.Wifi, "Pool connection", "Not configured")
+                    InfoRow(Icons.Default.CheckCircle, "Accepted shares", "Unavailable")
+                    InfoRow(Icons.Default.ShowChart, "Reported hashrate", "Unavailable")
                 }
             }
         }
@@ -345,6 +364,12 @@ private fun ScreenHeading(title: String, subtitle: String) {
         Text(title, color = Color.White, fontSize = 23.sp, fontWeight = FontWeight.Bold)
         Text(subtitle, color = Muted, fontSize = 11.sp)
     }
+}
+
+private fun readBatteryPercent(manager: BatteryManager?): Int {
+    if (manager == null) return -1
+    val value = manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+    return if (value in 0..100) value else -1
 }
 
 @Composable
