@@ -20,6 +20,9 @@ The API listens on `http://127.0.0.1:8000`.
 - `GET /` — service metadata
 - `GET /api/v1/health/live` — process liveness; does not imply database readiness
 - `GET /api/v1/health/ready` — readiness; returns HTTP 503 unless the configured database responds to `SELECT 1`
+- `GET /api/v1/market/quotes?assets=btc,xmr,ltc,doge` — live CoinGecko USD quotes for supported assets; returns HTTP 503 on provider failure and includes retrieval timestamps/source provenance.
+
+Market data is informational and is not yet used to calculate mining profitability. Provider timestamps represent retrieval time, not an exchange trade timestamp. Requests are capped at four supported assets.
 
 A missing database URL is reported as `not_configured`. No placeholder database connection is treated as healthy.
 
