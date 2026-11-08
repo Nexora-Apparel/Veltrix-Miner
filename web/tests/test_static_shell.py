@@ -59,9 +59,9 @@ class StaticShellTests(unittest.TestCase):
     def test_no_background_mining_or_polling_primitives(self):
         source = self.html + self.js + self.api
         forbidden = [
-            r"WebAssembly", r"SharedWorker", r"new\\s+Worker\\s*\\(",
-            r"navigator\\.hardwareConcurrency", r"setInterval\\s*\\(",
-            r"requestAnimationFrame\\s*\\(",
+            r"WebAssembly", r"SharedWorker", r"new\s+Worker\s*\(",
+            r"navigator\.hardwareConcurrency", r"setInterval\s*\(",
+            r"requestAnimationFrame\s*\(",
         ]
         for pattern in forbidden:
             self.assertIsNone(re.search(pattern, source, re.IGNORECASE), pattern)
