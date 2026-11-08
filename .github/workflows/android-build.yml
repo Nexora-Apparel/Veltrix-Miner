@@ -3,9 +3,11 @@ name: Android debug build
 on:
   push:
     branches:
-      - phase-2/android-app-foundation
+      - "phase-2/**"
+      - "phase-2-2/**"
   pull_request:
     branches:
+      - "phase-2/**"
       - main
 
 jobs:

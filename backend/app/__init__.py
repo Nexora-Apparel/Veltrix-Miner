@@ -1,0 +1,1 @@
+"""VELTRIX MINER backend application."""
