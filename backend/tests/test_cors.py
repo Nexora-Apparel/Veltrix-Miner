@@ -22,7 +22,7 @@ def test_cors_allows_only_the_configured_console_origin() -> None:
     response = preflight(client, "https://console.example")
     assert response.status_code == 200
     assert response.headers["access-control-allow-origin"] == "https://console.example"
-    assert response.headers["access-control-allow-credentials"] == "false"
+    assert "access-control-allow-credentials" not in response.headers
     assert "https://attacker.example" not in response.headers["access-control-allow-origin"]
 
 
