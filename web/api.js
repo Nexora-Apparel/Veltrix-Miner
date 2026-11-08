@@ -21,7 +21,7 @@ function apiRoot() {
   } catch {
     throw new ApiError("CONFIG_ERROR", "API base URL is invalid.");
   }
-  if (url.username || url.password || url.search || url.hash) {
+  if (url.username || url.password || url.search || url.hash || !["", "/"].includes(url.pathname)) {
     throw new ApiError("CONFIG_ERROR", "API base URL must not contain credentials, query parameters or fragments.");
   }
   const localHost = ["localhost", "127.0.0.1", "::1"].includes(url.hostname);
@@ -33,8 +33,7 @@ function apiRoot() {
 
 function endpoint(path) {
   const root = apiRoot();
-  const prefix = root.pathname.endsWith("/") ? root.pathname : root.pathname + "/";
-  root.pathname = prefix;
+  root.pathname = "/";
   return new URL(path.replace(/^\//, ""), root);
 }
 
