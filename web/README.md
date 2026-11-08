@@ -23,4 +23,10 @@ Worker and pool controls are intentionally absent. Phase 0 currently blocks live
 
 ## Validation
 
-The files are dependency-free and can be inspected or opened directly. This commit does not claim browser/device QA, backend integration, production deployment or mining operation. Test responsive layout and keyboard navigation on target devices before treating the shell as release-ready.
+Run the dependency-free integrity suite from the repository root:
+
+```bash
+python -m unittest discover -s web/tests -v
+```
+
+GitHub Actions runs the same checks when web files change. These checks verify local assets, navigation/view consistency, required sections, responsive CSS and the absence of selected background-compute/polling primitives. They do not replace browser/device QA, accessibility testing, backend integration or production security review.
