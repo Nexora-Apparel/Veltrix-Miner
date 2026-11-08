@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1018">
+  <meta name="description" content="VELTRIX MINER read-only mining intelligence control centre.">
+  <title>VELTRIX MINER — Control Centre</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="#overview" aria-label="Veltrix Miner overview">
+        <span class="brand-mark">V</span><span><strong>VELTRIX</strong><small>MINER CONTROL</small></span>
+      </a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav id="primary-nav">
+        <a class="nav-link active" href="#overview" data-view="overview"><span>◫</span>Overview</a>
+        <a class="nav-link" href="#market" data-view="market"><span>⌁</span>Market</a>
+        <a class="nav-link" href="#profitability" data-view="profitability"><span>◈</span>Profitability</a>
+        <a class="nav-link" href="#workers" data-view="workers"><span>▦</span>Workers</a>
+        <a class="nav-link" href="#pools" data-view="pools"><span>◎</span>Pools</a>
+        <a class="nav-link" href="#earnings" data-view="earnings"><span>↗</span>Earnings</a>
+        <a class="nav-link" href="#costs" data-view="costs"><span>≋</span>Costs</a>
+        <a class="nav-link" href="#audit" data-view="audit"><span>☷</span>Audit</a>
+        <a class="nav-link" href="#settings" data-view="settings"><span>⚙</span>Settings</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="environment"><i></i><span>LOCAL PREVIEW</span></div>
+        <p>No mining workload runs in this browser.</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><span class="eyebrow">MINING INTELLIGENCE / CONTROL PLANE</span><h1 id="page-title">Overview</h1></div>
+        <div class="topbar-right"><span class="read-only"><span class="lock">▣</span> READ-ONLY SHELL</span><button id="refresh-button" class="refresh-button" type="button">↻ <span>Refresh view</span></button></div>
+      </header>
+
+      <section class="notice" role="status">
+        <span class="notice-icon">!</span>
+        <div><strong>Mining is currently disabled</strong><p>Phase 0 feasibility is NO-GO: no separate compatible compute device has been verified. This interface is a static control-plane preview, not a mining service.</p></div>
+      </section>
+
+      <section class="view active-view" id="view-overview" aria-labelledby="overview-heading">
+        <div class="section-heading"><div><h2 id="overview-heading">System overview</h2><p>Current verified state across the platform.</p></div><span class="updated" id="last-updated">VIEW LOADED · —</span></div>
+        <div class="metric-grid">
+          <article class="metric-card"><div class="metric-top"><span>NET EARNINGS</span><b class="state unknown">UNKNOWN</b></div><strong class="metric-value">—</strong><small>No settled mining rewards or complete cost ledger.</small></article>
+          <article class="metric-card"><div class="metric-top"><span>ACTIVE WORKERS</span><b class="state unconfigured">UNCONFIGURED</b></div><strong class="metric-value">—</strong><small>No worker has registered a verified heartbeat.</small></article>
+          <article class="metric-card"><div class="metric-top"><span>COMPUTE HASHRATE</span><b class="state unconfigured">UNCONFIGURED</b></div><strong class="metric-value">—</strong><small>No authorised mining worker is connected.</small></article>
+          <article class="metric-card"><div class="metric-top"><span>POOL CONNECTION</span><b class="state unconfigured">UNCONFIGURED</b></div><strong class="metric-value">—</strong><small>Pool endpoint and worker credentials are not configured.</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel"><div class="panel-heading"><div><h3>Platform readiness</h3><p>Implementation gates and dependencies</p></div><span class="state warning">BLOCKED</span></div>
+            <div class="readiness-list">
+              <div><span class="readiness-dot warning-dot"></span><span><strong>Phase 0 · Feasibility</strong><small>NO-GO — suitable compute not available</small></span><b>BLOCKED</b></div>
+              <div><span class="readiness-dot neutral-dot"></span><span><strong>Phase 1 · Architecture</strong><small>Static web shell in implementation</small></span><b>IN PROGRESS</b></div>
+              <div><span class="readiness-dot neutral-dot"></span><span><strong>Worker integration</strong><small>Requires compatible, authorised hardware</small></span><b>DISABLED</b></div>
+              <div><span class="readiness-dot neutral-dot"></span><span><strong>Reward verification</strong><small>Requires pool and blockchain evidence</small></span><b>UNCONFIGURED</b></div>
+            </div>
+          </article>
+          <article class="panel"><div class="panel-heading"><div><h3>Data integrity</h3><p>Control-plane operating rules</p></div></div>
+            <ul class="rule-list"><li>Unknown values are never replaced with zero.</li><li>Stale telemetry cannot drive profitability decisions.</li><li>Estimated rewards are not counted as earnings.</li><li>Missing costs remain unknown, not free.</li><li>No browser-based mining or hidden compute.</li></ul>
+          </article>
+        </div>
+        <div class="panel bottom-panel"><div class="panel-heading"><div><h3>Recent system events</h3><p>Only events available in this static preview</p></div><span class="state unconfigured">NO EVENT SOURCE</span></div><div class="empty-state">No live audit feed is connected. Events will appear here only after an authenticated backend source is implemented.</div></div>
+      </section>
+
+      <section class="view" id="view-market"><div class="section-heading"><div><h2>Market data</h2><p>Provider-sourced prices and network parameters.</p></div></div><div class="metric-grid compact"><article class="metric-card"><span>BTC / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>CoinGecko adapter not connected to this frontend.</small></article><article class="metric-card"><span>XMR / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No current quote verified.</small></article><article class="metric-card"><span>LTC / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No current quote verified.</small></article><article class="metric-card"><span>DOGE / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No current quote verified.</small></article></div><div class="panel"><h3>Market source status</h3><p class="muted">The backend market endpoint exists, but this static frontend has no API base URL configured. No price is being inferred or fabricated.</p></div></section>
+
+      <section class="view" id="view-profitability"><div class="section-heading"><div><h2>Profitability analysis</h2><p>Scenario calculations are gated on complete, sourced inputs.</p></div><span class="state warning">NOT ELIGIBLE</span></div><div class="panel"><div class="empty-state large"><strong>Profitability unavailable</strong><p>Hardware compatibility, measured or labelled hashrate, power draw, network parameters, pool fees, electricity tariff, data cost and settlement costs are not all verified.</p><p>Missing inputs must not be treated as zero-cost assumptions.</p></div></div></section>
+
+      <section class="view" id="view-workers"><div class="section-heading"><div><h2>Worker inventory</h2><p>Only fresh, authenticated worker heartbeats can establish RUNNING state.</p></div><span class="state unconfigured">UNCONFIGURED</span></div><div class="panel"><div class="empty-state large"><strong>No mining workers registered</strong><p>The Realme 5 Pro is currently a control device, not an approved sustained mining worker. Browser tabs and serverless functions are not worker substitutes.</p></div></div></section>
+
+      <section class="view" id="view-pools"><div class="section-heading"><div><h2>Pool configuration</h2><p>Pool terms and connection telemetry are not yet available.</p></div><span class="state unconfigured">UNCONFIGURED</span></div><div class="panel"><div class="empty-state large"><strong>No pool configured</strong><p>No pool endpoint, algorithm compatibility, fee schedule, payout threshold or connection status has been verified.</p></div></div></section>
+
+      <section class="view" id="view-earnings"><div class="section-heading"><div><h2>Earnings ledger</h2><p>Estimated, pool-confirmed, paid and blockchain-confirmed rewards remain separate.</p></div><span class="state unknown">UNKNOWN</span></div><div class="panel"><div class="empty-state large"><strong>No verified earnings recorded</strong><p>No mining worker or pool reward source is connected. This is not evidence of a zero balance; the ledger is not configured.</p></div></div></section>
+
+      <section class="view" id="view-costs"><div class="section-heading"><div><h2>Operating costs</h2><p>Cost inputs must be measured or explicitly sourced before net earnings can be calculated.</p></div><span class="state unknown">UNKNOWN</span></div><div class="metric-grid compact"><article class="metric-card"><span>ELECTRICITY</span><strong class="metric-value">—</strong><b class="state unknown">UNKNOWN</b><small>Incremental tariff and consumption not measured.</small></article><article class="metric-card"><span>INTERNET / DATA</span><strong class="metric-value">—</strong><b class="state unknown">UNKNOWN</b><small>Marginal data cost not established.</small></article><article class="metric-card"><span>POOL FEES</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No pool selected.</small></article><article class="metric-card"><span>WITHDRAWAL / CONVERSION</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No settlement route selected.</small></article></div></section>
+
+      <section class="view" id="view-audit"><div class="section-heading"><div><h2>Audit trail</h2><p>Configuration changes and worker transitions require an authenticated event source.</p></div><span class="state unconfigured">UNCONFIGURED</span></div><div class="panel"><div class="empty-state large"><strong>Audit feed not connected</strong><p>No event history is fabricated in this preview. A future backend must preserve event timestamps, actor identity and source provenance.</p></div></div></section>
+
+      <section class="view" id="view-settings"><div class="section-heading"><div><h2>Settings & security</h2><p>Operator configuration remains intentionally unavailable in this read-only shell.</p></div><span class="state warning">READ-ONLY</span></div><div class="panel"><h3>Security boundaries</h3><ul class="rule-list"><li>No private-key or seed-phrase entry fields.</li><li>No wallet signing or transaction execution.</li><li>Future worker commands require authentication, authorisation, CSRF protection, idempotency and audit.</li><li>Production deployment and persistent database setup remain deferred.</li></ul></div></section>
+
+      <footer class="footer"><span>VELTRIX MINER · ZERO-COST DEVELOPMENT TRACK</span><span>STATIC PREVIEW · NO MINING PROCESS</span></footer>
+    </main>
+  </div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
