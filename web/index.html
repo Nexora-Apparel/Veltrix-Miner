@@ -35,7 +35,7 @@
     <main class="main-content">
       <header class="topbar">
         <div><span class="eyebrow">MINING INTELLIGENCE / CONTROL PLANE</span><h1 id="page-title">Overview</h1></div>
-        <div class="topbar-right"><span class="read-only"><span class="lock">▣</span> READ-ONLY SHELL</span><button id="refresh-button" class="refresh-button" type="button">↻ <span>Refresh view</span></button></div>
+        <div class="topbar-right"><span class="read-only"><span class="lock">▣</span> READ-ONLY SHELL</span><button id="refresh-button" class="refresh-button" type="button">↻ <span>Refresh data</span></button></div>
       </header>
 
       <section class="notice" role="status">
@@ -50,6 +50,8 @@
           <article class="metric-card"><div class="metric-top"><span>ACTIVE WORKERS</span><b class="state unconfigured">UNCONFIGURED</b></div><strong class="metric-value">—</strong><small>No worker has registered a verified heartbeat.</small></article>
           <article class="metric-card"><div class="metric-top"><span>COMPUTE HASHRATE</span><b class="state unconfigured">UNCONFIGURED</b></div><strong class="metric-value">—</strong><small>No authorised mining worker is connected.</small></article>
           <article class="metric-card"><div class="metric-top"><span>POOL CONNECTION</span><b class="state unconfigured">UNCONFIGURED</b></div><strong class="metric-value">—</strong><small>Pool endpoint and worker credentials are not configured.</small></article>
+          <article class="metric-card"><div class="metric-top"><span>API SERVICE</span><b class="state unconfigured" id="api-service-state">UNCONFIGURED</b></div><strong class="metric-value" id="api-service-value">—</strong><small id="api-service-detail">Public API origin is not configured.</small></article>
+          <article class="metric-card"><div class="metric-top"><span>DATABASE READINESS</span><b class="state unconfigured" id="database-state">UNCONFIGURED</b></div><strong class="metric-value" id="database-value">—</strong><small id="database-detail">Readiness has not been checked.</small></article>
         </div>
         <div class="content-grid">
           <article class="panel"><div class="panel-heading"><div><h3>Platform readiness</h3><p>Implementation gates and dependencies</p></div><span class="state warning">BLOCKED</span></div>
@@ -67,7 +69,7 @@
         <div class="panel bottom-panel"><div class="panel-heading"><div><h3>Recent system events</h3><p>Only events available in this static preview</p></div><span class="state unconfigured">NO EVENT SOURCE</span></div><div class="empty-state">No live audit feed is connected. Events will appear here only after an authenticated backend source is implemented.</div></div>
       </section>
 
-      <section class="view" id="view-market"><div class="section-heading"><div><h2>Market data</h2><p>Provider-sourced prices and network parameters.</p></div></div><div class="metric-grid compact"><article class="metric-card"><span>BTC / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>CoinGecko adapter not connected to this frontend.</small></article><article class="metric-card"><span>XMR / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No current quote verified.</small></article><article class="metric-card"><span>LTC / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No current quote verified.</small></article><article class="metric-card"><span>DOGE / USD</span><strong class="metric-value">—</strong><b class="state unconfigured">UNCONFIGURED</b><small>No current quote verified.</small></article></div><div class="panel"><h3>Market source status</h3><p class="muted">The backend market endpoint exists, but this static frontend has no API base URL configured. No price is being inferred or fabricated.</p></div></section>
+      <section class="view" id="view-market"><div class="section-heading"><div><h2>Market data</h2><p>Provider-sourced prices and network parameters.</p></div></div><div class="metric-grid compact"><article class="metric-card" data-asset="btc"><span>BTC / USD</span><strong class="metric-value" id="quote-btc">—</strong><b class="state unconfigured" id="quote-btc-state">UNCONFIGURED</b><small id="quote-btc-detail">No quote has been verified.</small></article><article class="metric-card" data-asset="xmr"><span>XMR / USD</span><strong class="metric-value" id="quote-xmr">—</strong><b class="state unconfigured" id="quote-xmr-state">UNCONFIGURED</b><small id="quote-xmr-detail">No quote has been verified.</small></article><article class="metric-card" data-asset="ltc"><span>LTC / USD</span><strong class="metric-value" id="quote-ltc">—</strong><b class="state unconfigured" id="quote-ltc-state">UNCONFIGURED</b><small id="quote-ltc-detail">No quote has been verified.</small></article><article class="metric-card" data-asset="doge"><span>DOGE / USD</span><strong class="metric-value" id="quote-doge">—</strong><b class="state unconfigured" id="quote-doge-state">UNCONFIGURED</b><small id="quote-doge-detail">No quote has been verified.</small></article></div><div class="panel"><h3>Market source status</h3><p class="muted">Quotes are requested only after an API origin is explicitly configured. Each response must pass schema, provenance and 2-minute freshness checks. No cached or stale quote is used.</p></div></section>
 
       <section class="view" id="view-profitability"><div class="section-heading"><div><h2>Profitability analysis</h2><p>Scenario calculations are gated on complete, sourced inputs.</p></div><span class="state warning">NOT ELIGIBLE</span></div><div class="panel"><div class="empty-state large"><strong>Profitability unavailable</strong><p>Hardware compatibility, measured or labelled hashrate, power draw, network parameters, pool fees, electricity tariff, data cost and settlement costs are not all verified.</p><p>Missing inputs must not be treated as zero-cost assumptions.</p></div></div></section>
 
@@ -86,6 +88,6 @@
       <footer class="footer"><span>VELTRIX MINER · ZERO-COST DEVELOPMENT TRACK</span><span>STATIC PREVIEW · NO MINING PROCESS</span></footer>
     </main>
   </div>
-  <script src="./app.js" defer></script>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
