@@ -3,10 +3,12 @@ name: Backend tests
 on:
   push:
     branches:
-      - phase-2-2/backend-api-foundation
+      - "phase-2-2/**"
   pull_request:
     branches:
-      - phase-2/android-app-foundation
+      - main
+      - "phase-2/**"
+      - "phase-2-2/**"
 
 permissions:
   contents: read
