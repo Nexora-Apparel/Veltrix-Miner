@@ -8,7 +8,11 @@ on:
   pull_request:
     branches:
       - "phase-2/**"
+      - "phase-2-2/**"
       - main
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -27,6 +31,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.7"
+
+      - name: Run Android unit tests
+        run: gradle testDebugUnitTest
 
       - name: Build debug APK
         run: gradle assembleDebug

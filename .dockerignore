@@ -1,0 +1,14 @@
+.git
+.github
+.gradle
+.idea
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.env
+**/.env.*
+!backend/.env.example
+app
+documentation
+*.apk
+*.aab
