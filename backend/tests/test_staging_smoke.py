@@ -4,6 +4,7 @@ import pytest
 
 from app.staging_smoke import (
     SmokeCheckError,
+    _NoRedirect,
     normalize_base_url,
     validate_liveness,
     validate_quotes,
@@ -103,3 +104,19 @@ def test_quotes_require_timezone_aware_timestamps() -> None:
     invalid[0]["retrieved_at"] = "2026-11-11T12:00:00"
     with pytest.raises(SmokeCheckError, match="timezone"):
         validate_quotes(invalid, now=NOW)
+
+
+
+def test_protection_bypass_header_is_not_forwarded_through_redirects() -> None:
+    from urllib.request import Request
+
+    handler = _NoRedirect()
+    request = Request("https://staging.example.test/api/v1/health/live")
+    assert handler.redirect_request(
+        request,
+        None,
+        302,
+        "Found",
+        {},
+        "https://attacker.example.test/collect",
+    ) is None
