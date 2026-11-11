@@ -43,6 +43,18 @@ Required configuration, managed only in the hosting/database secret managers:
 
 Provision a dedicated VELTRIX MINER staging PostgreSQL project/database or identify an already-provisioned database explicitly dedicated to this service. Do not reuse unrelated project credentials or production data.
 
+## Protected staging smoke workflow
+
+A fail-closed, manual GitHub Actions workflow is included at `.github/workflows/staging-smoke.yml`. It runs `python -m app.staging_smoke` and requires all three repository settings:
+
+- Repository variable `VELTRIX_STAGING_SMOKE_ENABLED=true`
+- Repository variable `VELTRIX_STAGING_BASE_URL=https://<verified-staging-origin>`
+- GitHub Actions secret `VERCEL_AUTOMATION_BYPASS_SECRET`
+
+The bypass secret is sent only as the Vercel automation-protection request header from the GitHub runner. It must never be placed in Android BuildConfig, APK resources, source control, or chat. The workflow is manually dispatched and remains skipped until the enable variable is set. It checks liveness, database readiness, and the exact four-asset CoinGecko quote contract, including positive prices, provenance, timestamp timezone, five-minute freshness, and a 60-second future-skew limit. Unit tests cover the validators without making live requests.
+
+Keep the database connection string only in the Vercel secret manager; it is not required by GitHub Actions.
+
 ## Security boundary and Android access
 
 Vercel SSO protection is enabled for all deployment URLs. The backend currently exposes read-only health and market routes and has no account/session authentication layer. The Android Retrofit client does not implement Vercel SSO.
@@ -55,9 +67,10 @@ Do not disable SSO as a shortcut. Do not embed a Vercel protection-bypass token,
 2. Redeploy and verify `GET /api/v1/health/live` returns HTTP 200.
 3. Verify `GET /api/v1/health/ready` returns HTTP 200 with `database=connected`; it must remain HTTP 503 otherwise.
 4. Verify `GET /api/v1/market/quotes?assets=btc,xmr,ltc,doge` returns current provider-sourced USD quotes with source and retrieval timestamps. Provider failure must remain an explicit 503, never a fabricated quote.
-5. Keep deployment protection enabled and implement the supported Android user-authentication path without APK-embedded server secrets.
-6. Configure Android with the verified HTTPS staging host and authentication flow.
-7. Run an end-to-end contract check through the actual Android client against staging. Mocked tests and CI-only builds do not satisfy this gate.
+5. Configure the GitHub Actions smoke-workflow variables and bypass secret, then dispatch the workflow and require a pass.
+6. Keep deployment protection enabled and implement the supported Android user-authentication path without APK-embedded server secrets.
+7. Configure Android with the verified HTTPS staging host and authentication flow.
+8. Run an end-to-end contract check through the actual Android client against staging. Mocked tests and CI-only builds do not satisfy this gate.
 
 ## Current blockers
 
@@ -65,4 +78,5 @@ Do not disable SSO as a shortcut. Do not embed a Vercel protection-bypass token,
 - The deployed readiness endpoint currently returns HTTP 503 because `DATABASE_URL` is absent.
 - The Android client cannot authenticate through Vercel SSO; no secure app-access flow has been implemented.
 - The live market endpoint responds with CoinGecko-sourced quotes, but the complete staging gate remains failed until database readiness and Android contract verification pass.
+- The protected staging smoke workflow is implemented but not enabled/configured with its repository variables and automation-bypass secret.
 - Do not build or distribute the device-test APK with a placeholder, guessed, unstable, or unverified API base URL.
