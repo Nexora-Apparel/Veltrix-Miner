@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlsplit
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 EXPECTED_ASSETS = {"btc", "xmr", "ltc", "doge"}
 MAX_QUOTE_AGE = timedelta(minutes=5)
@@ -25,11 +25,24 @@ class SmokeCheckError(RuntimeError):
     """Raised when staging does not satisfy a release smoke-check gate."""
 
 
+class _NoRedirect(HTTPRedirectHandler):
+    """Do not forward the Vercel bypass header to any redirect destination."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 def normalize_base_url(value: str) -> str:
-    parsed = urlsplit(value.strip())
+    try:
+        parsed = urlsplit(value.strip())
+        hostname = parsed.hostname
+        port = parsed.port
+    except ValueError as exc:
+        raise SmokeCheckError("VELTRIX_STAGING_BASE_URL is malformed") from exc
+
     if (
-        parsed.scheme != "https"
-        or not parsed.hostname
+        parsed.scheme.lower() != "https"
+        or not hostname
         or parsed.username
         or parsed.password
         or parsed.query
@@ -40,7 +53,11 @@ def normalize_base_url(value: str) -> str:
             "VELTRIX_STAGING_BASE_URL must be an HTTPS origin without "
             "credentials, path, query, or fragment"
         )
-    return value.strip().rstrip("/") + "/"
+    # Force validation of the port and normalize the authority before requests.
+    authority = hostname.lower()
+    if port is not None:
+        authority = f"{authority}:{port}"
+    return f"https://{authority}/"
 
 
 def validate_liveness(payload: object) -> None:
@@ -134,7 +151,8 @@ def _request_json(base_url: str, path: str, bypass_secret: str) -> object:
     request = Request(url, headers=headers, method="GET")
 
     try:
-        with urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
+        opener = build_opener(_NoRedirect())
+        with opener.open(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
             status = response.status
             final_url = response.geturl()
             raw = response.read(MAX_RESPONSE_BYTES + 1)
