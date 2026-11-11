@@ -30,7 +30,7 @@ The four market records contained the expected asset identifiers, USD currency, 
 
 ## Environment and database
 
-The non-decrypted Vercel environment inventory returned only `COINGECKO_BASE_URL` and `ENVIRONMENT`, both scoped to Production. No `DATABASE_URL` was present, and no staging-scoped variables were returned.
+The non-decrypted Vercel environment inventory returned only `COINGECKO_BASE_URL` and `ENVIRONMENT`, both scoped to Production. No `DATABASE_URL` was present, and no staging-scoped variables were returned. The Vercel project has no custom environment named `staging`: the custom-environment list was empty and filtering environment variables by slug `staging` returned not found. The deployment record's `target=staging` label does not substitute for a configured custom environment with staging-scoped variables.
 
 The connected Neon account search returned no project named for VELTRIX MINER. The existing `VELTRIXFOOTBALL` project is unrelated and must not be reused for this service.
 
@@ -63,8 +63,10 @@ Do not disable SSO as a shortcut. Do not embed a Vercel protection-bypass token,
 
 ## Release verification gates
 
-1. Configure the dedicated staging `DATABASE_URL` as a secret in the correct staging deployment environment, not in Git or Android configuration.
-2. Redeploy and verify `GET /api/v1/health/live` returns HTTP 200.
+1. Create the Vercel custom environment with slug `staging` for `veltrix-miner-staging`.
+2. Provision a dedicated VELTRIX MINER staging PostgreSQL database; do not reuse `VELTRIXFOOTBALL`.
+3. Configure `ENVIRONMENT=staging` and the dedicated `DATABASE_URL` as staging-scoped Vercel variables/secrets, not in Git or Android configuration.
+4. Redeploy and verify `GET /api/v1/health/live` returns HTTP 200.
 3. Verify `GET /api/v1/health/ready` returns HTTP 200 with `database=connected`; it must remain HTTP 503 otherwise.
 4. Verify `GET /api/v1/market/quotes?assets=btc,xmr,ltc,doge` returns current provider-sourced USD quotes with source and retrieval timestamps. Provider failure must remain an explicit 503, never a fabricated quote.
 5. Configure the GitHub Actions smoke-workflow variables and bypass secret, then dispatch the workflow and require a pass.
@@ -74,6 +76,7 @@ Do not disable SSO as a shortcut. Do not embed a Vercel protection-bypass token,
 
 ## Current blockers
 
+- A Vercel custom environment named `staging` has not been created.
 - Dedicated VELTRIX MINER staging PostgreSQL database and connection string are not provisioned.
 - The deployed readiness endpoint currently returns HTTP 503 because `DATABASE_URL` is absent.
 - The Android client cannot authenticate through Vercel SSO; no secure app-access flow has been implemented.
