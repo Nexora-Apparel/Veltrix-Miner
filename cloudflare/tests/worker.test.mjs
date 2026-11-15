@@ -24,13 +24,13 @@ test("readiness verifies D1 with a bounded read-only query", async () => {
     DB: {
       prepare(sql) {
         statement = sql;
-        return { first: async () => ({ ok: 1 }) };
+        return { first: async () => ({ version: "0001_initial" }) };
       },
     },
   };
   const response = await worker.fetch(request("/api/v1/health/ready"), env);
   assert.equal(response.status, 200);
-  assert.equal(statement, "SELECT 1 AS ok");
+  assert.match(statement, /FROM schema_migrations/);
   assert.equal((await response.json()).database, "connected");
 });
 
