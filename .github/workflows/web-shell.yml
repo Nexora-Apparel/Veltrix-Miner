@@ -7,10 +7,12 @@ on:
       - phase-1-zero-cost-architecture-clean
     paths:
       - "web/**"
+      - "cloudflare/**"
       - ".github/workflows/web-shell.yml"
   pull_request:
     paths:
       - "web/**"
+      - "cloudflare/**"
       - ".github/workflows/web-shell.yml"
 
 permissions:
@@ -33,3 +35,5 @@ jobs:
           node --input-type=module --check < web/app.js
       - name: Run static shell integrity tests
         run: python -m unittest discover -s web/tests -v
+      - name: Run Cloudflare Worker contract tests
+        run: node --test cloudflare/tests/worker.test.mjs
