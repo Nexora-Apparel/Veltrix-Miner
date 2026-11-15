@@ -144,7 +144,8 @@ async function handleApi(request, env) {
     try {
       const migration = await env.DB.prepare(
         "SELECT version FROM schema_migrations ORDER BY applied_at DESC LIMIT 1"
-      ).first();\n      if (!migration?.version) throw new Error("D1 schema is not migrated");
+      ).first();
+      if (!migration?.version) throw new Error("D1 schema is not migrated");
       return json({
         status: "ready",
         service: "VELTRIX MINER API",
