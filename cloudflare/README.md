@@ -34,14 +34,14 @@ Cloudflare may change quotas or plan terms. Check the account's current plan and
    ```sh
    npx wrangler d1 create veltrix-miner
    ```
-3. Copy the returned database ID into `cloudflare/wrangler.jsonc`, replacing the explicit placeholder.
+3. Copy the returned database ID into `wrangler.jsonc`, replacing the explicit placeholder.
 4. Apply the initial schema:
    ```sh
    npx wrangler d1 migrations apply veltrix-miner --remote
    ```
 5. Deploy only after reviewing the generated plan and confirming no paid feature is enabled:
    ```sh
-   npx wrangler deploy --config cloudflare/wrangler.jsonc
+   npx wrangler deploy
    ```
 6. Set the web console API origin to the resulting `workers.dev` URL in a reviewed frontend config change. If the console and API share the same origin, leave `WEB_ORIGIN` empty; configure one exact HTTPS origin only when cross-origin browser access is genuinely required.
 
